@@ -19,15 +19,7 @@ mongoose.connect('mongodb://localhost:27017/qhealth', {
     console.error('MongoDB connection error:', err);
 });
 
-
-
-// server/server.js (continued)
-
 app.use('/api/auth', authRoutes);
-
-
-
-
 
 app.get('/', (req, res) => {
   res.send('Welcome to QHealth');
