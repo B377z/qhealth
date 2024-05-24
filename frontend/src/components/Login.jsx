@@ -15,6 +15,9 @@ const Login = () => {
       const res = await axios.post('http://localhost:5000/api/auth/login', { username, password });
       console.log(res.data);
 
+      // Store token in local storage
+      localStorage.setItem('token', res.data.token);
+
       const queryParams = new URLSearchParams(location.search);
       const membershipType = queryParams.get('membership');
       console.log('Membership Type:', membershipType); // Debugging log

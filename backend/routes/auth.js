@@ -5,6 +5,42 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const SECRET_KEY = 'Pe$P3$W!F!'; // Replace with a strong secret key
+
+// Middleware to verify token
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(403).json({ error: 'No token provided' });
+
+  jwt.verify(token.split(' ')[1], SECRET_KEY, (err, decoded) => {
+    if (err) return res.status(500).json({ error: 'Failed to authenticate token' });
+
+    req.userId = decoded.id;
+    next();
+  });
+};
+
+// Fetch user profile
+router.get('/profile', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('-password');
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update user profile
+router.put('/profile', verifyToken, async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findByIdAndUpdate(req.userId, { email }, { new: true }).select('-password');
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.post('/register', async (req, res) => {
   const { username, password, email, membership } = req.body; // Destructure request body
   try {
@@ -27,6 +63,10 @@ router.post('/register', async (req, res) => {
     // Create a new user with a default 30-day trial membership
     const newUser = new User({ username, password, email, membership: membership || 'trial' });
     await newUser.save();
+
+    // Generate JWT token
+    const token = jwt.sign({ id: newUser._id }, SECRET_KEY, { expiresIn: '1h' });
+
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -7,6 +7,7 @@ import Home from './components/Home';
 import About from './components/About';
 import Services from './components/Services';
 import MembershipSelection from './components/MembershipSelection';
+import Profile from './components/Profile';  // Import Profile Component
 import './App.css';
 
 const App = () => {
@@ -19,8 +20,9 @@ const App = () => {
         <Route path="/services" element={<Services />} />
         <Route path="/sign-in" element={<Login />} />
         <Route path="/sign-up" element={<Register />} /> {/* New sign-up route */}
-        <Route path="/register" element={<MembershipSelection />} />
-        <Route path="/register/:membershipType" element={<Register />} />
+        <Route path="/register" element={<MembershipSelection />} /> {/* Ensure correct path */}
+        <Route path="/register/:membershipType" element={<Register />} /> {/* Ensure correct path */}
+        <Route path="/profile" element={<Profile />} /> {/* Add Profile Route */}
         <Route path="*" element={<Home />} /> {/* Default Route */}
       </Routes>
     </Router>
@@ -28,6 +30,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
