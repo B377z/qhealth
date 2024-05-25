@@ -25,7 +25,7 @@ const Login = () => {
       if (membershipType) {
         navigate(`/register/${membershipType}`);
       } else {
-        navigate('/');
+        navigate('/profile');
       }
     } catch (error) {
       console.error(error.response.data);

@@ -11,7 +11,7 @@ const MembershipSelection = () => {
       navigate(`/register/${membershipType}`);
     } else {
       // User is not logged in, redirect to login with membership type
-      navigate(`/login?membership=${membershipType}`);
+      navigate(`/sign-in?membership=${membershipType}`);
     }
   };
 

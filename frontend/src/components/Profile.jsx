@@ -18,9 +18,10 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(response.data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -36,7 +37,7 @@ const Profile = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      await axios.put('http://localhost:5000/api/auth/profile', user, {
+      await axios.put('http://localhost:5000/api/auth/profile', { email: user.email }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Profile updated successfully');
